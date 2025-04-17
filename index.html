@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI研究ライブラリ - 最新AIモデルの徹底解説と比較</title>
+    <style>
+        :root {
+            --primary-color: #FF7043; /* Claude's orange */
+            --secondary-color: #FFF3EE; /* Light orange */
+            --accent-color: #FFAB91; /* Medium orange */
+            --text-color: #333333;
+            --dark-bg: #1E1E1E; /* Dark background */
+            --light-gray: #f8f8f8;
+            --border-color: #E0E0E0;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--dark-bg);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: var(--dark-bg);
+            color: white;
+        }
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 20px 0;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+        .logo span {
+            color: var(--primary-color);
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        nav ul li {
+            margin-left: 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav ul li a:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: var(--primary-color);
+        }
+        main {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .hero {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 25px;
+        }
+        .search-bar {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto 20px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+        }
+        .search-bar button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #E8602C;
+        }
+        .btn-outline {
+            display: inline-block;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background-color: transparent;
+            padding: 10px 25px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-left: 10px;
+        }
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        h3 {
+            font-size: 1.4rem;
+            margin: 30px 0 15px;
+            color: var(--primary-color);
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .card-img {
+            height: 180px;
+            background-color: var(--light-gray);
+            background-size: cover;
+            background-position: center;
+        }
+        .card-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .tag {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px 20px;
+        }
+        .date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .featured-section {
+            background-color: var(--secondary-color);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        .featured-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .featured-image {
+            flex: 1;
+            min-width: 300px;
+            height: 250px;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--light-gray);
+        }
+        .comparison-table tr:hover {
+            background-color: var(--secondary-color);
+        }
+        .cta-section {
+            text-align: center;
+            padding: 40px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            margin: 50px 0;
+        }
+        footer {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 40px 0 20px;
+        }
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+        .footer-section h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        .footer-section ul {
+            list-style: none;
+        }
+        .footer-section li {
+            margin-bottom: 8px;
+        }
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+        }
+        .footer-bottom p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .site-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            nav ul {
+                flex-wrap: wrap;
+                margin-top: 15px;
+            }
+            nav ul li {
+                margin: 0 15px 10px 0;
+            }
+            .btn, .btn-outline {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+                text-align: center;
+            }
+            .featured-content {
+                flex-direction: column;
+            }
+            .featured-image {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="site-header">
+                <a href="index.html" class="logo">AI<span>研究ライブラリ</span></a>
+                <nav>
+                    <ul>
+                        <li><a href="models/index.html">準備中 - モデル一覧</a></li>
+                        <li><a href="comparisons/index.html">準備中 - 比較</a></li>
+                        <li><a href="use-cases/index.html">準備中 - 活用事例</a></li>
+                        <li><a href="tutorials/index.html">準備中 - チュートリアル</a></li>
+                        <li><a href="about/index.html">準備中 - About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>AI技術メモ・リファレンスライブラリ</h1>
+            <p>OpenAI、Anthropic、Googleなど各社のAIモデルについての調査メモを整理・公開しています。個人的な調査結果の共有が目的で、公式情報ではありません。</p>
+            <div class="search-bar">
+                <input type="text" placeholder="モデル名やキーワードで検索...">
+                <button type="submit">検索</button>
+            </div>
+            <a href="models/index.html" class="btn">モデルメモ一覧</a>
+            <a href="comparisons/index.html" class="btn-outline">比較メモ</a>
+        </section>
+
+        <!-- 最新追加メモ -->
+        <section>
+            <h2>最新追加メモ <span class="new-badge">NEW</span></h2>
+            <div class="featured-section">
+                <h3>OpenAIの新モデル「O3」と「O4 mini」に関するメモ</h3>
+                <div class="featured-content">
+                    <div class="featured-image" style="background-image: url('/api/placeholder/400/320');"></div>
+                    <div class="featured-text">
+                        <p>2025年4月に発表された「O3」と「O4 mini」についての調査メモです。ChatGPTの「oシリーズ」モデルとして、これらが持つマルチモーダル対応やツール活用などの特徴をまとめています。</p>
+                        <p>このメモではGPT-4との違いや競合モデルとの機能比較なども含め、各情報源から収集した内容を整理しています。</p>
+                        <a href="models/openai/o3-o4-mini.html" class="btn">メモを読む</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <!-- Anthropic Claude 3シリーズ -->
+                <article class="card">
+                    <div class="card-img" style="background-image: url('/api/placeholder/300/180');"></div>
+                    <div class="card-content">
+                        <h3>Anthropic Claude 3シリーズのメモ</h3>
+                        <div class="card-tags">
+                            <span class="tag">Anthropic</span>
+                            <span class="tag">Claude 3</span>
+                            <span class="tag">LLM</span>
+                        </div>
+                        <p>Anthropicの最新モデル、Claude 3シリーズ（Haiku、Sonnet、Opus）についての簡易メモです。各モデルの特徴と用途別の選び方をまとめています。</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="date">2025年3月20日</span>
+                        <a href="#" class="btn-outline">読む</a>
+                    </div>
+                </article>
+
+                <!-- Google Gemini -->
+                <article class="card">
+                    <div class="card-img" style="background-image: url('/api/placeholder/300/180');"></div>
+                    <div class="card-content">
+                        <h3>Google Geminiに関するメモ</h3>
+                        <div class="card-tags">
+                            <span class="tag">Google</span>
+                            <span class="tag">Gemini</span>
+                            <span class="tag">比較</span>
+                        </div>
+                        <p>GoogleのGeminiモデルについて調査した内容をまとめたメモです。GPTとの違いや特徴的な機能などについて整理しています。</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="date">2025年3月15日</span>
+                        <a href="#" class="btn-outline">読む</a>
+                    </div>
+                </article>
+
+                <!-- 料金比較メモ -->
+                <article class="card">
+                    <div class="card-img" style="background-image: url('/api/placeholder/300/180');"></div>
+                    <div class="card-content">
+                        <h3>AIモデルの料金比較メモ</h3>
+                        <div class="card-tags">
+                            <span class="tag">比較</span>
+                            <span class="tag">料金</span>
+                            <span class="tag">メモ</span>
+                        </div>
+                        <p>各社のAIモデルの料金体系を簡単に比較したメモです。個人利用や小規模ビジネス向けの視点でまとめています。</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="date">2025年3月5日</span>
+                        <a href="#" class="btn-outline">読む</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- AIモデル比較メモ -->
+        <section>
+            <h2>AIモデル比較メモ</h2>
+            <p>主要なAIモデルの基本情報をまとめた簡易的な比較表です。詳細は各モデルのメモページをご覧ください。</p>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>モデル</th>
+                        <th>企業</th>
+                        <th>特徴</th>
+                        <th>マルチモーダル</th>
+                        <th>速度</th>
+                        <th>料金目安</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>O3</td>
+                        <td>OpenAI</td>
+                        <td>推論強化、ツール活用</td>
+                        <td>対応</td>
+                        <td>中程度</td>
+                        <td>$20/月～</td>
+                    </tr>
+                    <tr>
+                        <td>O4 mini</td>
+                        <td>OpenAI</td>
+                        <td>高速、軽量</td>
+                        <td>対応</td>
+                        <td>高速</td>
+                        <td>API利用</td>
+                    </tr>
+                    <tr>
+                        <td>Claude 3 Opus</td>
+                        <td>Anthropic</td>
+                        <td>長文理解、安全性</td>
+                        <td>入力のみ</td>
+                        <td>中程度</td>
+                        <td>$20/月～</td>
+                    </tr>
+                    <tr>
+                        <td>Gemini Pro</td>
+                        <td>Google</td>
+                        <td>Google連携</td>
+                        <td>対応</td>
+                        <td>中程度</td>
+                        <td>無料～</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="comparisons/index.html" class="btn">比較メモ一覧へ</a>
+            </div>
+        </section>
+
+        <!-- カテゴリ別コンテンツ -->
+        <section>
+            <h2>カテゴリ別コンテンツ</h2>
+            <div class="card-grid">
+                <article class="card">
+                    <div class="card-img" style="background-image: url('/api/placeholder/300/180');"></div>
+                    <div class="card-content">
+                        <h3>モデル解説</h3>
+                        <p>各AIモデルの詳細スペック、特徴、パフォーマンス、活用シーンを総合的に解説。最新モデルから定番モデルまで。</p>
+                    </div>
+                    <div class="card-footer">
+                        <span></span>
+                        <a href="models/index.html" class="btn-outline">一覧へ</a>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="card-img" style="background-image: url('/api/placeholder/300/180');"></div>
+                    <div class="card-content">
+                        <h3>比較・ベンチマーク</h3>
+                        <p>各モデル間の性能比較、料金比較、ユースケース別の最適モデル選定ガイド。客観的な比較でモデル選びをサポート。</p>
+                    </div>
+                    <div class="card-footer">
+                        <span></span>
+                        <a href="comparisons/index.html" class="btn-outline">一覧へ</a>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="card-img" style="background-image: url('/api/placeholder/300/180');"></div>
+                    <div class="card-content">
+                        <h3>チュートリアル</h3>
+                        <p>プロンプトエンジニアリングの基礎から応用まで、AIモデルを最大限に活用するためのガイドラインとテクニック。</p>
+                    </div>
+                    <div class="card-footer">
+                        <span></span>
+                        <a href="tutorials/index.html" class="btn-outline">一覧へ</a>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="card-img" style="background-image: url('/api/placeholder/300/180');"></div>
+                    <div class="card-content">
+                        <h3>活用事例</h3>
+                        <p>ビジネス、研究、教育など様々な分野でのAI活用事例。実際の導入例と成功のポイントを紹介。</p>
+                    </div>
+                    <div class="card-footer">
+                        <span></span>
+                        <a href="use-cases/index.html" class="btn-outline">一覧へ</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>さらに詳しく知りたい方へ</h2>
+            <p>各種モデルの深堀り解説やチュートリアル、実践ガイドを用意しています。ぜひ以下からご覧ください。</p>
+            <a href="about/index.html" class="btn">AI研究ライブラリについて</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>サイト</h3>
+                    <ul>
+                        <li><a href="index.html">トップページ</a></li>
+                        <li><a href="models/index.html">モデル一覧</a></li>
+                        <li><a href="comparisons/index.html">比較</a></li>
+                        <li><a href="use-cases/index.html">活用事例</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>カテゴリ</h3>
+                    <ul>
+                        <li><a href="tutorials/index.html">チュートリアル</a></li>
+                        <li><a href="about/index.html">About</a></li>
+                        <li><a href="contact.html">お問い合わせ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>フォロー</h3>
+                    <ul>
+                        <li><a href="https://twitter.com/your_handle" target="_blank">Twitter</a></li>
+                        <li><a href="https://github.com/your_handle" target="_blank">GitHub</a></li>
+                        <li><a href="https://linkedin.com/in/your_handle" target="_blank">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 AI研究ライブラリ. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

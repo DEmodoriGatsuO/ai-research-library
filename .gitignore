@@ -1,0 +1,53 @@
+# OS関連ファイル
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# エディタ関連ファイル
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# ログファイル
+*.log
+logs/
+npm-debug.log*
+
+# 一時ファイル
+tmp/
+temp/
+.cache/
+
+# ビルドファイル
+dist/
+build/
+out/
+
+# 依存関係
+node_modules/
+vendor/
+.npm
+.yarn
+
+# 環境設定ファイル
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# バックアップファイル
+*.bak
+*.backup
+*~
+
+# その他
+.htaccess
+__pycache__/
+*.py[cod]
+*.so
+.Python
+*.db
